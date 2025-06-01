@@ -15,19 +15,23 @@ namespace Assets.Scripts
             RequestPokemon();
         }
 
-        public async void RequestPokemon()
+        public void RequestPokemon()
         {
             Debug.Log("Requesting Pokemon");
-            PokemonModel pokemon;
             try
             {
-                pokemon = await PokeAPI.GetPokemon(1);
-                Debug.Log($"Got Pokemon\n {pokemon}");
+                PokeAPI.GetPokemon(5, PokemonCallback);
             }
             catch (Exception e)
             {
                 throw new Exception(e.ToString());
             }
+        }
+
+        public void PokemonCallback(PokemonModel model)
+        {
+            Debug.Log($"Got Pokemon\n {model}");
+
         }
     }
 }

@@ -14,7 +14,6 @@ namespace Assets.Scripts.Data
         private const string POKEMON_ENDPOINT = "pokemon";
         private static HttpClient _client = new HttpClient();
 
-
         private static async Task<JObject> Request(string endPoint, int id)
         {
             try
@@ -31,10 +30,10 @@ namespace Assets.Scripts.Data
             }
         }
 
-        public static async Task<PokemonModel> GetPokemon(int id)
+        public static async void GetPokemon(int id, Action<PokemonModel> callback)
         {
-            var json = await Request("pokemon", id);
-            return new PokemonModel(json);
+            var json = await Request(POKEMON_ENDPOINT, id);
+            callback(new PokemonModel(json));
         }
     }
 }
