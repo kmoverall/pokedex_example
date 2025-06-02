@@ -3,6 +3,7 @@ using Assets.Scripts.Core;
 using Assets.Scripts.Data;
 using Assets.Scripts.UI.Fields;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Assets.Scripts.UI.Menus
 {
@@ -15,6 +16,8 @@ namespace Assets.Scripts.UI.Menus
         private GameObject _loadingOverlay;
         [SerializeField]
         private List<InputField> _fields;
+
+        private bool _loaded = false;
 
         private void Awake()
         {
@@ -33,10 +36,17 @@ namespace Assets.Scripts.UI.Menus
             AppState.API.GetPokemon(id, PopulateMenu);
         }
 
+        private void Update()
+        {
+            if (!_loaded)
+                Debug.Log("Loading");
+        }
+
         private void PopulateMenu(PokemonModel model)
         {
+            _loaded = true;
             _currentPokemon = model;
-            Debug.Log(_currentPokemon);
+            Debug.Log(model);
             foreach(var field in _fields)
             {
                 field.Populate(model);
@@ -44,6 +54,6 @@ namespace Assets.Scripts.UI.Menus
         }
 
         private void EnableLoadingScreen() => _loadingOverlay.SetActive(true);
-        private void DisableLoadingScreen(bool wasLoadSuccess) => _loadingOverlay.SetActive(false);
+        private void DisableLoadingScreen() => _loadingOverlay.SetActive(false);
     }
 }

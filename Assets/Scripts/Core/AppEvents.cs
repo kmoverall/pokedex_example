@@ -13,6 +13,6 @@ namespace Assets.Scripts.Core
 
         // Activated when an API call is completed
         // bool: true if successful, false if error
-        public static Action<bool> OnAPICallEnd;
+        public static Action OnAPICallEnd;
     }
 }

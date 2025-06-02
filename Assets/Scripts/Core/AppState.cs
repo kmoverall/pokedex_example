@@ -9,7 +9,7 @@ namespace Assets.Scripts.Core
 {
     public static class AppState
     {
-        public static PokeAPI API = new();
+        public static PokeAPI API;
         public static PokeCache Cache = new();
     }
 }
