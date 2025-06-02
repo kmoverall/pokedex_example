@@ -20,7 +20,7 @@ namespace Assets.Scripts
             Debug.Log("Requesting Pokemon");
             try
             {
-                PokeAPI.GetPokemon(5, PokemonCallback);
+                AppState.API.GetPokemon(5, PokemonCallback);
             }
             catch (Exception e)
             {

@@ -16,7 +16,6 @@ namespace Assets.Scripts.Data
         public float Height { get; private set; }
         public float Weight { get; private set; }
         public BaseStats BaseStats { get; private set; }
-
         public List<PokeType.Type> Type { get; private set; }
 
         public PokemonModel(JObject json)

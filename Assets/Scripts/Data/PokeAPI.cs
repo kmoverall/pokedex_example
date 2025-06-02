@@ -8,30 +8,38 @@ using System.Linq;
 
 namespace Assets.Scripts.Data
 {
-    public static class PokeAPI
+    public class PokeAPI
     {
         private const string API_URL = "https://pokeapi.co/api/v2/";
         private const string POKEMON_ENDPOINT = "pokemon";
-        private static HttpClient _client = new HttpClient();
+        private HttpClient _client = new HttpClient();
 
-        private static async Task<JObject> Request(string endPoint, int id)
+        public bool IsWaitingForResponse { get; private set; }
+
+        private async Task<JObject> Request(string endPoint, int id)
         {
+            IsWaitingForResponse = true;
             try
             {
                 StringBuilder sb = new StringBuilder(API_URL);
                 sb.AppendFormat("{0}/{1}", endPoint, id);
 
                 var response = await _client.GetStringAsync(sb.ToString());
+                IsWaitingForResponse = false;
                 return JObject.Parse(response);
             }
             catch (Exception e)
             {
+                IsWaitingForResponse = false;
                 throw new Exception(e.ToString());
             }
         }
 
-        public static async void GetPokemon(int id, Action<PokemonModel> callback)
+        public async void GetPokemon(int id, Action<PokemonModel> callback)
         {
+            if (AppState.Cache.Contains(id))
+                callback(AppState.Cache.Get(id));
+
             var json = await Request(POKEMON_ENDPOINT, id);
             callback(new PokemonModel(json));
         }
