@@ -8,7 +8,7 @@ namespace Assets.Scripts.Data
 {
     public class PokeCache
     {
-        private Dictionary<int, PokemonModel> _cache;
+        private Dictionary<int, PokemonModel> _cache = new();
 
         public bool Contains(int id) => _cache.ContainsKey(id);
         public bool Contains(PokemonModel model) => _cache.ContainsKey(model.Id);

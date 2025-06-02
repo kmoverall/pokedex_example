@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using Assets.Scripts.Core;
 
 namespace Assets.Scripts.Data
 {
@@ -18,6 +19,7 @@ namespace Assets.Scripts.Data
 
         private async Task<JObject> Request(string endPoint, int id)
         {
+            AppEvents.OnAPICallBegin();
             IsWaitingForResponse = true;
             try
             {
@@ -25,12 +27,17 @@ namespace Assets.Scripts.Data
                 sb.AppendFormat("{0}/{1}", endPoint, id);
 
                 var response = await _client.GetStringAsync(sb.ToString());
+
                 IsWaitingForResponse = false;
+                AppEvents.OnAPICallEnd(true);
+
                 return JObject.Parse(response);
             }
             catch (Exception e)
             {
                 IsWaitingForResponse = false;
+                AppEvents.OnAPICallEnd(false);
+
                 throw new Exception(e.ToString());
             }
         }

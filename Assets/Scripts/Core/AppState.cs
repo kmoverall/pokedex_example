@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Assets.Scripts.Data;
 
-namespace Assets.Scripts
+namespace Assets.Scripts.Core
 {
     public static class AppState
     {
