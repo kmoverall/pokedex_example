@@ -15,7 +15,13 @@ namespace Assets.Scripts.UI.Menus
         [SerializeField]
         private GameObject _loadingOverlay;
         [SerializeField]
-        private List<InputField> _fields;
+        private TextField _nameField;
+        [SerializeField]
+        private TextField _categoryField;
+        [SerializeField]
+        private NumericField _heightField;
+        [SerializeField]
+        private NumericField _weightField;
 
         private bool _loaded = false;
 
@@ -36,21 +42,14 @@ namespace Assets.Scripts.UI.Menus
             AppState.API.GetPokemon(id, PopulateMenu);
         }
 
-        private void Update()
-        {
-            if (!_loaded)
-                Debug.Log("Loading");
-        }
-
         private void PopulateMenu(PokemonModel model)
         {
             _loaded = true;
             _currentPokemon = model;
-            Debug.Log(model);
-            foreach(var field in _fields)
-            {
-                field.Populate(model);
-            }
+            _nameField.Populate(model.Name);
+            _categoryField.Populate(model.Category);
+            _heightField.Populate(model.Height);
+            _weightField.Populate(model.Weight);
         }
 
         private void EnableLoadingScreen() => _loadingOverlay.SetActive(true);

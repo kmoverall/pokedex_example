@@ -18,14 +18,12 @@ namespace Assets.Scripts.Data
 
         public bool IsWaitingForResponse { get; private set; }
 
-        private IEnumerator Request(string endPoint, int id, Action<JObject> callback)
+        private IEnumerator Request(string url, Action<JObject> callback)
         {
             AppEvents.OnAPICallBegin();
             IsWaitingForResponse = true;
-            StringBuilder sb = new StringBuilder(API_URL);
-            sb.AppendFormat("{0}/{1}", endPoint, id);
 
-            var request = UnityWebRequest.Get(sb.ToString());
+            var request = UnityWebRequest.Get(url);
             yield return request.SendWebRequest();
 
             var response = JObject.Parse(request.downloadHandler.text);
@@ -33,7 +31,15 @@ namespace Assets.Scripts.Data
             IsWaitingForResponse = false;
             AppEvents.OnAPICallEnd();
 
-            callback(response); 
+            callback(response);
+        }
+
+        private IEnumerator Request(string endPoint, int id, Action<JObject> callback)
+        {
+            StringBuilder sb = new StringBuilder(API_URL);
+            sb.AppendFormat("{0}/{1}", endPoint, id);
+
+            yield return Request(sb.ToString(), callback);
         }
 
         public void GetPokemon(int id, Action<PokemonModel> callback)
@@ -46,7 +52,15 @@ namespace Assets.Scripts.Data
 
         private void GetPokemonCallback(JObject result, Action<PokemonModel> callback)
         {
-            callback(new PokemonModel(result));
+            var json = StartCoroutine(Request(
+                result["species"]["url"].ToString(), 
+                r => GetPokemonSpeciesCallback(result, r, callback)
+            ));
+        }
+
+        public void GetPokemonSpeciesCallback(JObject baseResult, JObject speciesResult, Action<PokemonModel> callback)
+        {
+            callback(new PokemonModel(baseResult, speciesResult));
         }
     }
 }
