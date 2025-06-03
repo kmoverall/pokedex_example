@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using Assets.Scripts.Utilities;
+using UnityEngine;
 
 namespace Assets.Scripts.Data
 {
@@ -21,8 +22,9 @@ namespace Assets.Scripts.Data
         public float Weight { get; private set; }
         public BaseStats BaseStats { get; private set; }
         public List<PokeType.Type> Type { get; private set; }
+        public Texture Sprite { get; private set; }
 
-        public PokemonModel(JObject baseJson, JObject speciesJson)
+        public PokemonModel(JObject baseJson, JObject speciesJson, Texture sprite)
         {
             Id = baseJson["id"].ToObject<int>();
             Name = baseJson["name"].ToObject<string>().FirstCharToUpper();
@@ -34,6 +36,8 @@ namespace Assets.Scripts.Data
 
             BaseStats = new BaseStats(baseJson["stats"]);
             Type = PokeType.ParseTypes(baseJson["types"]);
+
+            Sprite = sprite;
         }
     }
 }

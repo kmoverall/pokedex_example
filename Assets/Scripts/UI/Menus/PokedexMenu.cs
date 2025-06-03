@@ -23,9 +23,13 @@ namespace Assets.Scripts.UI.Menus
         [SerializeField]
         private NumericField _weightField;
         [SerializeField]
+        private PokeTypeField _primaryTypeField;
+        [SerializeField]
+        private PokeTypeField _secondaryTypeField;
+        [SerializeField]
         private BaseStatsField _baseStatsField;
-
-        private bool _loaded = false;
+        [SerializeField]
+        private SpriteField _spriteField;
 
         private void Awake()
         {
@@ -46,7 +50,6 @@ namespace Assets.Scripts.UI.Menus
 
         private void PopulateMenu(PokemonModel model)
         {
-            _loaded = true;
             _currentPokemon = model;
 
             _nameField.Populate(model.Name);
@@ -56,6 +59,9 @@ namespace Assets.Scripts.UI.Menus
             _heightField.Populate(model.Height);
             _weightField.Populate(model.Weight);
             _baseStatsField.Populate(model.BaseStats);
+            _primaryTypeField.Populate(model.Type[0]);
+            _secondaryTypeField.Populate(model.Type[1]);
+            _spriteField.Populate(model.Sprite);
         }
 
         private void EnableLoadingScreen() => _loadingOverlay.SetActive(true);

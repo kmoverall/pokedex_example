@@ -1,12 +1,9 @@
-using UnityEngine;
-using System;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
-using System.Linq;
 using Assets.Scripts.Core;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
+using System.Text;
+using UnityEngine;
 using UnityEngine.Networking;
 
 namespace Assets.Scripts.Data
@@ -18,7 +15,7 @@ namespace Assets.Scripts.Data
 
         public bool IsWaitingForResponse { get; private set; }
 
-        private IEnumerator Request(string url, Action<JObject> callback)
+        private IEnumerator Get(string url, Action<JObject> callback)
         {
             AppEvents.OnAPICallBegin();
             IsWaitingForResponse = true;
@@ -33,13 +30,28 @@ namespace Assets.Scripts.Data
 
             callback(response);
         }
+        private IEnumerator GetSprite(string url, Action<Texture> callback)
+        {
+            AppEvents.OnAPICallBegin();
+            IsWaitingForResponse = true;
+
+            var request = UnityWebRequestTexture.GetTexture(url);
+            yield return request.SendWebRequest();
+
+            var response = DownloadHandlerTexture.GetContent(request);
+
+            IsWaitingForResponse = false;
+            AppEvents.OnAPICallEnd();
+
+            callback(response);
+        }
 
         private IEnumerator Request(string endPoint, int id, Action<JObject> callback)
         {
             StringBuilder sb = new StringBuilder(API_URL);
             sb.AppendFormat("{0}/{1}", endPoint, id);
 
-            yield return Request(sb.ToString(), callback);
+            yield return Get(sb.ToString(), callback);
         }
 
         public void GetPokemon(int id, Action<PokemonModel> callback)
@@ -47,20 +59,28 @@ namespace Assets.Scripts.Data
             if (AppState.Cache.Contains(id))
                 callback(AppState.Cache.Get(id));
 
-            var json = StartCoroutine(Request(POKEMON_ENDPOINT, id, r => GetPokemonCallback(r, callback)));
+            StartCoroutine(Request(POKEMON_ENDPOINT, id, r => GetPokemonCallback(r, callback)));
         }
 
         private void GetPokemonCallback(JObject result, Action<PokemonModel> callback)
         {
-            var json = StartCoroutine(Request(
+            StartCoroutine(Get(
                 result["species"]["url"].ToString(), 
                 r => GetPokemonSpeciesCallback(result, r, callback)
             ));
         }
 
-        public void GetPokemonSpeciesCallback(JObject baseResult, JObject speciesResult, Action<PokemonModel> callback)
+        private void GetPokemonSpeciesCallback(JObject baseResult, JObject speciesResult, Action<PokemonModel> callback)
         {
-            callback(new PokemonModel(baseResult, speciesResult));
+            StartCoroutine(GetSprite(
+                baseResult["sprites"]["front_default"].ToString(),
+                r => GetPokemonSpriteCallback(baseResult, speciesResult, r, callback)
+            ));
+        }
+
+        private void GetPokemonSpriteCallback(JObject baseResult, JObject speciesResult, Texture sprite, Action<PokemonModel> callback)
+        {
+            callback(new PokemonModel(baseResult, speciesResult, sprite));
         }
     }
 }

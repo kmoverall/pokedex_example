@@ -18,7 +18,7 @@ namespace Assets.Scripts.UI.Fields
         {
             Initialize();
         }
-        public virtual void Initialize() { }
+        protected virtual void Initialize() { }
 
         public void SetLabelText(string text)
         {
