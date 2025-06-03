@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using Assets.Scripts.Utilities;
 
 namespace Assets.Scripts.Data
 {
@@ -24,7 +25,7 @@ namespace Assets.Scripts.Data
         public PokemonModel(JObject baseJson, JObject speciesJson)
         {
             Id = baseJson["id"].ToObject<int>();
-            Name = baseJson["name"].ToObject<string>();
+            Name = baseJson["name"].ToObject<string>().FirstCharToUpper();
             Height = baseJson["height"].ToObject<float>() * HEIGHT_CONVERSION_FACTOR;
             Weight = baseJson["weight"].ToObject<float>() * WEIGHT_CONVERSION_FACTOR;
 

@@ -16,7 +16,7 @@ namespace Assets.Scripts.UI.Fields
         private TMP_InputField _field;
         public override void Populate(float data)
         {
-            _field.SetTextWithoutNotify(data.ToString("F1"));
+            _field.SetTextWithoutNotify(data.ToString(_numericFormat));
         }
     }
 }

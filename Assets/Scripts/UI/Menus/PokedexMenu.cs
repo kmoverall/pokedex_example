@@ -22,6 +22,8 @@ namespace Assets.Scripts.UI.Menus
         private NumericField _heightField;
         [SerializeField]
         private NumericField _weightField;
+        [SerializeField]
+        private BaseStatsField _baseStatsField;
 
         private bool _loaded = false;
 
@@ -46,10 +48,14 @@ namespace Assets.Scripts.UI.Menus
         {
             _loaded = true;
             _currentPokemon = model;
+
             _nameField.Populate(model.Name);
+            _nameField.SetLabelText($"#{model.Id}");
+
             _categoryField.Populate(model.Category);
             _heightField.Populate(model.Height);
             _weightField.Populate(model.Weight);
+            _baseStatsField.Populate(model.BaseStats);
         }
 
         private void EnableLoadingScreen() => _loadingOverlay.SetActive(true);

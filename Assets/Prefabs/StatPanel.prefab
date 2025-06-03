@@ -558,6 +558,7 @@ GameObject:
   - component: {fileID: 653642085239210019}
   - component: {fileID: 5132420025729405757}
   - component: {fileID: 1124017425050200812}
+  - component: {fileID: 5086785581288855085}
   m_Layer: 5
   m_Name: StatPanel
   m_TagString: Untagged
@@ -641,6 +642,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
+--- !u!114 &5086785581288855085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4651735147192846189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 119fa9c579e0af24f8710b10c786a8e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _label: {fileID: 4924276222715414470}
+  _inputField: {fileID: 4945596461833411239}
+  _slider: {fileID: 5905905512639346395}
 --- !u!1 &4868367204135480523
 GameObject:
   m_ObjectHideFlags: 0
