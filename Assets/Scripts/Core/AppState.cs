@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Assets.Scripts.Data;
+using Assets.Scripts.Data.DataSources;
 
 namespace Assets.Scripts.Core
 {
     public static class AppState
     {
-        public static PokeAPI API;
-        public static PokeCache Cache = new();
+        public static PokedexDataSource Data = new();
     }
 }

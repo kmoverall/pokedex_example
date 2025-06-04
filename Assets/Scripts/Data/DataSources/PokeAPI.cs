@@ -6,9 +6,9 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace Assets.Scripts.Data
+namespace Assets.Scripts.Data.DataSources
 {
-    public class PokeAPI : MonoBehaviour
+    public class PokeAPI : MonoBehaviour, IPokeDataSource
     {
         private const string API_URL = "https://pokeapi.co/api/v2/";
         private const string POKEMON_ENDPOINT = "pokemon";
@@ -56,9 +56,6 @@ namespace Assets.Scripts.Data
 
         public void GetPokemon(int id, Action<PokemonModel> callback)
         {
-            if (AppState.Cache.Contains(id))
-                callback(AppState.Cache.Get(id));
-
             StartCoroutine(Request(POKEMON_ENDPOINT, id, r => GetPokemonCallback(r, callback)));
         }
 
@@ -82,5 +79,7 @@ namespace Assets.Scripts.Data
         {
             callback(new PokemonModel(baseResult, speciesResult, sprite));
         }
+
+        public bool Contains(int id) => true;
     }
 }

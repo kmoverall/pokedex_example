@@ -55,7 +55,7 @@ namespace Assets.Scripts.UI.Menus
 
         private void LoadPokemon(int id)
         {
-            AppState.API.GetPokemon(id, PopulateMenu);
+            AppState.Data.GetPokemon(id, PopulateMenu);
         }
 
         private void PopulateMenu(PokemonModel model)

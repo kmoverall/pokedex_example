@@ -1,4 +1,4 @@
-﻿using Assets.Scripts.Data;
+﻿using Assets.Scripts.Data.DataSources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +15,8 @@ namespace Assets.Scripts.Core
 
         private void Awake()
         {
-            AppState.API = _api;
+            AppState.Data.AddDataSource(new PokeCache());
+            AppState.Data.AddDataSource(_api);
         }
     }
 }
