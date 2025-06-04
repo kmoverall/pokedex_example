@@ -4,6 +4,8 @@ using Assets.Scripts.Data;
 using Assets.Scripts.UI.Fields;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using UnityEngine.UI;
+using TMPro;
 
 namespace Assets.Scripts.UI.Menus
 {
@@ -13,7 +15,7 @@ namespace Assets.Scripts.UI.Menus
 
         private PokemonModel _currentPokemon;
         [SerializeField]
-        private GameObject _loadingOverlay;
+        private List<GameObject> _loadingOverlays;
         [SerializeField]
         private TextField _nameField;
         [SerializeField]
@@ -31,15 +33,23 @@ namespace Assets.Scripts.UI.Menus
         [SerializeField]
         private SpriteField _spriteField;
 
+        [SerializeField]
+        private TMP_InputField _searchField;
+        [SerializeField]
+        private Button _searchButton;
+
         private void Awake()
         {
             //AppEvents.OnAPICallBegin += () => SetLoadingOverlayVisible(true);
             AppEvents.OnAPICallBegin += EnableLoadingScreen;
             AppEvents.OnAPICallEnd += DisableLoadingScreen;
+            _searchButton.onClick.AddListener(Search);
+
         }
 
         private void Start()
         {
+            _searchField.text = INITIAL_LOAD_ID.ToString();
             LoadPokemon(INITIAL_LOAD_ID);
         }
 
@@ -64,7 +74,21 @@ namespace Assets.Scripts.UI.Menus
             _spriteField.Populate(model.Sprite);
         }
 
-        private void EnableLoadingScreen() => _loadingOverlay.SetActive(true);
-        private void DisableLoadingScreen() => _loadingOverlay.SetActive(false);
+        private void EnableLoadingScreen()
+        {
+            foreach (var overlay in _loadingOverlays)
+                overlay.SetActive(true);
+        }
+        private void DisableLoadingScreen()
+        {
+            foreach (var overlay in _loadingOverlays)
+                overlay.SetActive(false);
+        }
+
+        private void Search()
+        {
+            int id = int.Parse(_searchField.text);
+            LoadPokemon(id);
+        }
     }
 }
